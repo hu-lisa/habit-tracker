@@ -1,31 +1,29 @@
-import { eachDayOfInterval, endOfWeek, format, isFuture, isSameDay, startOfWeek, subDays } from "date-fns";
+import { format, isFuture, isSameDay, subDays } from "date-fns";
 import Button from "./Button";
 import { useHabits, type Habit } from "../context/useHabits";
 
+type HabitListProps = {
+    visibleDates: Date[];
+}
 
-export default function HabitList() {
+export default function HabitList({ visibleDates }: HabitListProps) {
     const { habits } = useHabits();
     if (habits.length === 0) {
         return <h1 className="text-center text-shadow-zinc-500 py-12">No habits yet. Add one above to get started</h1>
     }
     return (
         <div className="flex flex-col gap-3">
-            {habits.map(habit => <HabitItem key={habit.id} habit={habit} />)}
+            {habits.map(habit => <HabitItem key={habit.id} habit={habit} visibleDates={visibleDates}/>)}
         </div>
     )
 }
 
 type HabitItemProps = {
     habit: Habit
+    visibleDates: Date[];
 }
-function HabitItem({ habit }: HabitItemProps) {
+function HabitItem({ habit, visibleDates }: HabitItemProps) {
     const {deleteHabit, toggleHabit} = useHabits();
-
-
-    const visibleDates = eachDayOfInterval({
-        start: startOfWeek(new Date(), { weekStartsOn: 1 }),
-        end: endOfWeek(new Date(), { weekStartsOn: 1 })
-    });
 
     const streak = getStreak(habit.completions);
 
