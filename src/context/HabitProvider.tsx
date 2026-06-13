@@ -1,13 +1,14 @@
 import { isSameDay } from "date-fns";
 import { useState, type ReactNode } from "react";
 import { HabitContext, type Habit } from "./useHabits";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 type HabitProviderProps = {
     children: ReactNode
 }
 
 export default function HabitProvider({ children }: HabitProviderProps) {
-    const [habits, setHabits] = useState<Habit[]>([]);
+    const [habits, setHabits] = useLocalStorage<Habit[]>("Habits", []);
 
     function addHabit(name: string) {
         setHabits([...habits, { id: crypto.randomUUID(), name, completions: [] }]); //this is fine if we completely overwrite
