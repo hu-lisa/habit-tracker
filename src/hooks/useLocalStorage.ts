@@ -15,7 +15,13 @@ export default function useLocalStorage<T>(key: string, initialValue: T) {
     }); //function version of usestate will only be called the first time the component renders
 
     useEffect(() => { //when smth inside the dependency array changes, you want to run a side effect
-        localStorage.setItem(key, JSON.stringify(storedValue))
+        localStorage.setItem(key, JSON.stringify(storedValue));
+
+
+        /*return () => {
+            ...//cleanup function, add smth to remove your previous useEffect call everytime it gets rerun
+            useful when useEffect is run multiple times in a row and has "cleanupable" effects
+        }*/
     }, [storedValue, key]) //when storedValue changes, store it in local
 
     return [storedValue, setStoredValue] as const;
